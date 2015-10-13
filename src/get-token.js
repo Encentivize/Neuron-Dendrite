@@ -52,7 +52,11 @@ var _ = require('lodash');
 //    }
 //}
 var messages = {
-    programNotFound: 'program cannot be blank'
+    programNameRequired: 'Program name cannot be blank',
+    clientIdRequired: 'Client id cannot be blank',
+    usernameRequired: 'Username cannot be blank',
+    passwordRequired: 'Password cannot be blank',
+    redirectUriRequired: 'Redirect uri cannot be blank',
 };
 
 module.exports = function getToken(inputOptions, callback) {
@@ -64,7 +68,19 @@ module.exports = function getToken(inputOptions, callback) {
     };
     var options = _.merge({}, defaultOptions, inputOptions);
     if (_.isEmpty(options.programName)) {
-        return callback(new Error(messages.programNotFound));
+        return callback(new Error(messages.programNameRequired));
+    }
+    if (_.isEmpty(options.clientId)) {
+        return callback(new Error(messages.clientIdRequired));
+    }
+    if (_.isEmpty(options.username)) {
+        return callback(new Error(messages.usernameRequired));
+    }
+    if (_.isEmpty(options.password)) {
+        return callback(new Error(messages.passwordRequired));
+    }
+    if (_.isEmpty(options.redirectUri)) {
+        return callback(new Error(messages.redirectUriRequired));
     }
 };
 module.exports.messages = messages;
