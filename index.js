@@ -1,2 +1,2 @@
 'use strict';
-require('./src/get-token');
+module.exports = require('./src/get-token');
