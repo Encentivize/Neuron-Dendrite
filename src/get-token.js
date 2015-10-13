@@ -8,6 +8,7 @@ var messages = {
     programNameIsInTheWrongFormat : 'Program name can only contain numbers, letters and dashes',
     clientIdRequired: 'Client id cannot be blank',
     clientIdMustBeAString : 'Client id must be a string',
+    clientIdIsInTheWrongFormat:'Client id  can only contain numbers, letters and dashes',
     usernameRequired: 'Username cannot be blank',
     usernameMustBeAString : 'Username must be a string',
     passwordRequired: 'Password cannot be blank',
@@ -101,6 +102,10 @@ function isValid(options, callback) {
     }
     if (!isString(options.clientId)) {
         callback(new Error(messages.clientIdMustBeAString));
+        return false;
+    }
+    if(!alphaNumericDashRegex.test(options.clientId)){
+        callback(new Error(messages.clientIdIsInTheWrongFormat));
         return false;
     }
     if (_.isEmpty(options.username)) {

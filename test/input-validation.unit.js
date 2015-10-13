@@ -179,4 +179,14 @@ describe('The get token method should validate the inputs that it is passed', fu
             callback();
         }
     });
+    it('#18 - clientId must only contain letters, numbers and dashes', function (callback) {
+        var options = _.clone(defaultOptions);
+        options.clientId = "asd/qqqu'#@!.";
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message).to.equal(getToken.messages.clientIdIsInTheWrongFormat);
+            callback();
+        }
+    });
 });
