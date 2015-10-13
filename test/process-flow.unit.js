@@ -31,7 +31,7 @@ var invalidResponseNoLocationInHeaders = {
 };
 var unexpectedResponse = {
     statusCode: 200
-}
+};
 
 var testError = new Error('Test Error');
 var counter = 0;
@@ -54,7 +54,7 @@ describe('The get token method should return the token', function () {
     it('#02 - if the initial request is successful but the second results in an error this should be passed to the callback', function (callback) {
         counter = 0;
         getToken.__set__("request", function (options, callback) {
-            if (counter == 0) {
+            if (counter === 0) {
                 counter++;
                 return callback(null, successResponse);
             }
@@ -95,7 +95,7 @@ describe('The get token method should return the token', function () {
     it('#05 - if the initial request succeeds but the second results in a 302 without a header this should return the correct error to the callback', function (callback) {
         counter = 0;
         getToken.__set__("request", function (options, callback) {
-            if (counter == 0) {
+            if (counter === 0) {
                 counter++;
                 return callback(null, successResponse);
             }
@@ -112,7 +112,7 @@ describe('The get token method should return the token', function () {
     it('#06 - if the initial request succeeds but the second results in a 302 with headers but no location header this should return the correct error to the callback', function (callback) {
         counter = 0;
         getToken.__set__("request", function (options, callback) {
-            if (counter == 0) {
+            if (counter === 0) {
                 counter++;
                 return callback(null, successResponse);
             }
@@ -141,7 +141,7 @@ describe('The get token method should return the token', function () {
     it('#08 - if the initial request succeeds but the second results in an unexpected status code this should return the correct error to the callback', function (callback) {
         counter = 0;
         getToken.__set__("request", function (options, callback) {
-            if (counter == 0) {
+            if (counter === 0) {
                 counter++;
                 return callback(null, successResponse);
             }

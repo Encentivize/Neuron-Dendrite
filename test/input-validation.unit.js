@@ -16,7 +16,6 @@ var defaultOptions = {
 };
 
 describe('The get token method should validate the inputs that it is passed', function () {
-    "use strict";
     it('#01 - programName is required', function (callback) {
         var options = _.clone(defaultOptions);
         delete options.programName;
