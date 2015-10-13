@@ -7,9 +7,9 @@ var getToken = rewire('../src/get-token');
 var requestFake = require('./request-fake');
 getToken.__set__("request", requestFake);
 var defaultOptions = {
-    programName: "vivo-admin",
-    clientId: "cairo-frontend-dev",
-    username: "vivoenergy@encentivize.co.za",
+    programName: "test-program",
+    clientId: "mySuper-awesomeClient1",
+    username: "test-user@encentivize.co.za",
     password: "123456",
     redirectUri: "http://localhost:6792/#/login"
 };
