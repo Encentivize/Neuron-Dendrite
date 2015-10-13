@@ -8,7 +8,8 @@ var messages = {
     usernameRequired: 'Username cannot be blank',
     passwordRequired: 'Password cannot be blank',
     redirectUriRequired: 'Redirect uri cannot be blank',
-    neuronBaseUrlRequired: 'Neuron base url cannot be blank'
+    neuronBaseUrlRequired: 'Neuron base url cannot be blank',
+    responseTypeRequired: 'Response type cannot be blank'
 };
 
 module.exports = function getToken(inputOptions, callback) {
@@ -36,6 +37,9 @@ module.exports = function getToken(inputOptions, callback) {
     }
     if (_.isEmpty(options.neuronBaseUrl)) {
         return callback(new Error(messages.neuronBaseUrlRequired));
+    }
+    if (_.isEmpty(options.responseType)) {
+        return callback(new Error(messages.responseTypeRequired));
     }
     var fullUrl = options.neuronBaseUrl + '/' + options.programName + '/login';
     return callback();

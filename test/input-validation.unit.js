@@ -81,4 +81,22 @@ describe('The get token method should validate the inputs that it is passed', fu
             callback();
         }
     });
+    it('#08 - If no responseType is provided it should use a default and not contain an error', function (callback) {
+        var options = _.clone(defaultOptions);
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.not.be.ok;
+            callback();
+        }
+    });
+    it('#09 - If the responseType is provided it cannot be blank', function (callback) {
+        var options = _.clone(defaultOptions);
+        options.responseType = "";
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message).to.equal(getToken.messages.responseTypeRequired);
+            callback();
+        }
+    });
 });
