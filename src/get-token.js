@@ -4,12 +4,19 @@ var _ = require('lodash');
 
 var messages = {
     programNameRequired: 'Program name cannot be blank',
+    programNameMustBeAString : 'Program name must be a string',
     clientIdRequired: 'Client id cannot be blank',
+    clientIdMustBeAString : 'Client id must be a string',
     usernameRequired: 'Username cannot be blank',
+    usernameMustBeAString : 'Username must be a string',
     passwordRequired: 'Password cannot be blank',
+    passwordMustBeAString : 'Password must be a string',
     redirectUriRequired: 'Redirect uri cannot be blank',
+    redirectUriMustBeAString : 'Redirect uri must be a string',
     neuronBaseUrlRequired: 'Neuron base url cannot be blank',
-    responseTypeRequired: 'Response type cannot be blank'
+    neuronBaseUrlMustBeAString : 'Neuron base url must be a string',
+    responseTypeRequired: 'Response type cannot be blank',
+    responseTypeMustBeAString : 'Response type must be a string'
 };
 
 module.exports = function getToken(inputOptions, callback) {
@@ -78,30 +85,61 @@ function isValid(options, callback) {
         callback(new Error(messages.programNameRequired));
         return false;
     }
+    if (!isString(options.programName)) {
+        callback(new Error(messages.programNameMustBeAString));
+        return false;
+    }
     if (_.isEmpty(options.clientId)) {
         callback(new Error(messages.clientIdRequired));
+        return false;
+    }
+    if (!isString(options.clientId)) {
+        callback(new Error(messages.clientIdMustBeAString));
         return false;
     }
     if (_.isEmpty(options.username)) {
         callback(new Error(messages.usernameRequired));
         return false;
     }
+    if (!isString(options.username)) {
+        callback(new Error(messages.usernameMustBeAString));
+        return false;
+    }
     if (_.isEmpty(options.password)) {
         callback(new Error(messages.passwordRequired));
+        return false;
+    }
+    if (!isString(options.password)) {
+        callback(new Error(messages.passwordMustBeAString));
         return false;
     }
     if (_.isEmpty(options.redirectUri)) {
         callback(new Error(messages.redirectUriRequired));
         return false;
     }
+    if (!isString(options.redirectUri)) {
+        callback(new Error(messages.redirectUriMustBeAString));
+        return false;
+    }
     if (_.isEmpty(options.neuronBaseUrl)) {
         callback(new Error(messages.neuronBaseUrlRequired));
+        return false;
+    }
+    if (!isString(options.neuronBaseUrl)) {
+        callback(new Error(messages.neuronBaseUrlMustBeAString));
         return false;
     }
     if (_.isEmpty(options.responseType)) {
         callback(new Error(messages.responseTypeRequired));
         return false;
     }
+    if (!isString(options.responseType)) {
+        callback(new Error(messages.responseTypeMustBeAString));
+        return false;
+    }
     return true;
 }
 
+function isString(value) {
+    return typeof value == 'string' || value instanceof String;
+}

@@ -99,13 +99,73 @@ describe('The get token method should validate the inputs that it is passed', fu
             callback();
         }
     });
-    it('#09 - If the responseType is provided it cannot be blank', function (callback) {
+    it('#10 - programName must be a string', function (callback) {
         var options = _.clone(defaultOptions);
-        options.responseType = "";
+        options.programName = [1,2];
         getToken(options, getTokenComplete);
         function getTokenComplete(err) {
             expect(err).to.be.ok;
-            expect(err.message).to.equal(getToken.messages.responseTypeRequired);
+            expect(err.message).to.equal(getToken.messages.programNameMustBeAString);
+            callback();
+        }
+    });
+    it('#11 - clientId must be a string', function (callback) {
+        var options = _.clone(defaultOptions);
+        options.clientId = [1,2];
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message).to.equal(getToken.messages.clientIdMustBeAString);
+            callback();
+        }
+    });
+    it('#12 - username must be a string', function (callback) {
+        var options = _.clone(defaultOptions);
+        options.username = [1,2];
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message).to.equal(getToken.messages.usernameMustBeAString);
+            callback();
+        }
+    });
+    it('#13 - password must be a string', function (callback) {
+        var options = _.clone(defaultOptions);
+        options.password = [1,2];
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message).to.equal(getToken.messages.passwordMustBeAString);
+            callback();
+        }
+    });
+    it('#14 - redirectUri must be a string', function (callback) {
+        var options = _.clone(defaultOptions);
+        options.redirectUri = [1,2];
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message).to.equal(getToken.messages.redirectUriMustBeAString);
+            callback();
+        }
+    });
+    it('#15 - neuronBaseUrl must be a string', function (callback) {
+        var options = _.clone(defaultOptions);
+        options.neuronBaseUrl = [1,2];
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message).to.equal(getToken.messages.neuronBaseUrlMustBeAString);
+            callback();
+        }
+    });
+    it('#16 - responseType must be a string', function (callback) {
+        var options = _.clone(defaultOptions);
+        options.responseType = [1,2];
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message).to.equal(getToken.messages.responseTypeMustBeAString);
             callback();
         }
     });
