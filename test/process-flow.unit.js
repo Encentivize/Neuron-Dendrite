@@ -13,9 +13,26 @@ var defaultOptions = {
     redirectUri: "http://localhost:6792/#/login"
 };
 
+var successResponse = {
+    statusCode: 302,
+    headers: {
+        location: "fake&access_token=bob&code=hi"
+    }
+};
+var serverErrorResponse = {
+    statusCode: 500
+};
+var invalidResponseNoHeaders = {
+    statusCode: 302
+};
+var invalidResponseNoLocationInHeaders = {
+    statusCode: 302,
+    headers:{}
+};
+var testError = new Error('Test Error');
+var counter = 0;
 describe('The get token method should return the token', function () {
     it('#01 - if the initial request results in an error this should be passed to the callback', function (callback) {
-        var testError = new Error('Test Error');
         getToken.__set__("request", function (options, callback) {
             var fakeHttpResponse = {
                 statusCode: 500
@@ -31,23 +48,13 @@ describe('The get token method should return the token', function () {
         }
     });
     it('#02 - if the initial request is successful but the second results in an error this should be passed to the callback', function (callback) {
-        var testError = new Error('Test Error');
-        var counter = 0;
+        counter = 0;
         getToken.__set__("request", function (options, callback) {
-            if(counter == 0){
+            if (counter == 0) {
                 counter++;
-                var firstFakeHttpResponse = {
-                    statusCode: 302,
-                    headers: {
-                        location: "fake&access_token=bob&code=hi"
-                    }
-                };
-                return callback(null, firstFakeHttpResponse);
+                return callback(null, successResponse);
             }
-            var secondFakeHttpResponse = {
-                statusCode: 500
-            };
-            return callback(testError, secondFakeHttpResponse);
+            return callback(testError, serverErrorResponse);
         });
         var options = _.clone(defaultOptions);
         getToken(options, getTokenComplete);
@@ -59,10 +66,7 @@ describe('The get token method should return the token', function () {
     });
     it('#03 - if the initial request results in a 302 without a header this should return the correct error to the callback', function (callback) {
         getToken.__set__("request", function (options, callback) {
-            var fakeHttpResponse = {
-                statusCode: 302
-            };
-            return callback(null, fakeHttpResponse);
+            return callback(null, invalidResponseNoHeaders);
         });
         var options = _.clone(defaultOptions);
         getToken(options, getTokenComplete);
@@ -74,11 +78,7 @@ describe('The get token method should return the token', function () {
     });
     it('#04 - if the initial request results in a 302 with headers but no location header this should return the correct error to the callback', function (callback) {
         getToken.__set__("request", function (options, callback) {
-            var fakeHttpResponse = {
-                statusCode: 302,
-                headers:{}
-            };
-            return callback(null, fakeHttpResponse);
+            return callback(null, invalidResponseNoLocationInHeaders);
         });
         var options = _.clone(defaultOptions);
         getToken(options, getTokenComplete);
@@ -89,22 +89,13 @@ describe('The get token method should return the token', function () {
         }
     });
     it('#05 - if the initial request succeeds but the second results in a 302 without a header this should return the correct error to the callback', function (callback) {
-        var counter = 0;
+        counter = 0;
         getToken.__set__("request", function (options, callback) {
-            if(counter == 0){
+            if (counter == 0) {
                 counter++;
-                var firstFakeHttpResponse = {
-                    statusCode: 302,
-                    headers: {
-                        location: "fake&access_token=bob&code=hi"
-                    }
-                };
-                return callback(null, firstFakeHttpResponse);
+                return callback(null, successResponse);
             }
-            var secondFakeResponse = {
-                statusCode: 302
-            };
-            return callback(null, secondFakeResponse);
+            return callback(null, invalidResponseNoHeaders);
         });
         var options = _.clone(defaultOptions);
         getToken(options, getTokenComplete);
@@ -115,23 +106,13 @@ describe('The get token method should return the token', function () {
         }
     });
     it('#06 - if the initial request succeeds but the second results in a 302 with headers but no location header this should return the correct error to the callback', function (callback) {
-        var counter = 0;
+        counter = 0;
         getToken.__set__("request", function (options, callback) {
-            if(counter == 0){
+            if (counter == 0) {
                 counter++;
-                var firstFakeHttpResponse = {
-                    statusCode: 302,
-                    headers: {
-                        location: "fake&access_token=bob&code=hi"
-                    }
-                };
-                return callback(null, firstFakeHttpResponse);
+                return callback(null, successResponse);
             }
-            var secondFakeResponse = {
-                statusCode: 302,
-                headers:{}
-            };
-            return callback(null, secondFakeResponse);
+            return callback(null, invalidResponseNoHeaders);
         });
         var options = _.clone(defaultOptions);
         getToken(options, getTokenComplete);
