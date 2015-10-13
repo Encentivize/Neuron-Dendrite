@@ -1,0 +1,43 @@
+{
+  "name": "neuron-dendrite",
+  "version": "1.0.0",
+  "description": "Gets member tokens from neuron",
+  "main": "index.js",
+  "scripts": {
+    "test": "tests"
+  },
+  "keywords": [
+    "neuron"
+  ],
+  "author": {
+    "name": "Ryan Kotzen",
+    "email": "ryank@entelect.co.za"
+  },
+  "homepage": "http://www.encentivize.co.za",
+  "license": "MIT",
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Encentivize/Neuron-Dendrite.git"
+  },
+  "keywords": [
+    "neuron",
+    "token",
+    "oauth",
+    "oauth2.0"
+  ],
+  "dependencies": {
+    "request": "^2.65.0"
+  },
+  "devDependencies": {
+    "fs": "0.0.2",
+    "gulp": "3.9.0",
+    "gulp-istanbul": "0.10.0",
+    "gulp-jshint": "1.11.0",
+    "gulp-mocha": "2.1.1",
+    "mocha": "2.2.5",
+    "npm": "2.8.3",
+    "should": "6.0.3",
+    "yargs": "3.10.0"
+  }
+}
