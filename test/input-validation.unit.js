@@ -169,4 +169,14 @@ describe('The get token method should validate the inputs that it is passed', fu
             callback();
         }
     });
+    it('#17 - programName must only contain letters, numbers and dashes', function (callback) {
+        var options = _.clone(defaultOptions);
+        options.programName = "asd/qqqu'#@!.";
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message).to.equal(getToken.messages.programNameIsInTheWrongFormat);
+            callback();
+        }
+    });
 });

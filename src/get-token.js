@@ -5,6 +5,7 @@ var _ = require('lodash');
 var messages = {
     programNameRequired: 'Program name cannot be blank',
     programNameMustBeAString : 'Program name must be a string',
+    programNameIsInTheWrongFormat : 'Program name can only contain numbers, letters and dashes',
     clientIdRequired: 'Client id cannot be blank',
     clientIdMustBeAString : 'Client id must be a string',
     usernameRequired: 'Username cannot be blank',
@@ -87,6 +88,11 @@ function isValid(options, callback) {
     }
     if (!isString(options.programName)) {
         callback(new Error(messages.programNameMustBeAString));
+        return false;
+    }
+    var alphaNumericDashRegex = new RegExp('^[a-zA-Z0-9/-]*$');
+    if(!alphaNumericDashRegex.test(options.programName)){
+        callback(new Error(messages.programNameIsInTheWrongFormat));
         return false;
     }
     if (_.isEmpty(options.clientId)) {
