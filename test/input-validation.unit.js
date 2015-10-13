@@ -1,8 +1,9 @@
+/*jshint expr: true*/ // needed so that the .ok passes linting
 var getToken = require('../src/get-token');
 var chai = require('chai');
 var expect = chai.expect;
 var _ = require('lodash');
-
+//var rewire = require('rewire');
 var defaultOptions = {
     programName: "vivo-admin",
     clientId: "cairo-frontend-dev",
