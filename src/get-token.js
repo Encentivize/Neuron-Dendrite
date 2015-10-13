@@ -20,26 +20,8 @@ module.exports = function getToken(inputOptions, callback) {
         state: ""
     };
     var options = _.merge({}, defaultOptions, inputOptions);
-    if (_.isEmpty(options.programName)) {
-        return callback(new Error(messages.programNameRequired));
-    }
-    if (_.isEmpty(options.clientId)) {
-        return callback(new Error(messages.clientIdRequired));
-    }
-    if (_.isEmpty(options.username)) {
-        return callback(new Error(messages.usernameRequired));
-    }
-    if (_.isEmpty(options.password)) {
-        return callback(new Error(messages.passwordRequired));
-    }
-    if (_.isEmpty(options.redirectUri)) {
-        return callback(new Error(messages.redirectUriRequired));
-    }
-    if (_.isEmpty(options.neuronBaseUrl)) {
-        return callback(new Error(messages.neuronBaseUrlRequired));
-    }
-    if (_.isEmpty(options.responseType)) {
-        return callback(new Error(messages.responseTypeRequired));
+    if (!isValid(options, callback)) {
+        return;
     }
     var fullUrl = options.neuronBaseUrl + '/' + options.programName + '/login';
     return callback();
@@ -91,4 +73,35 @@ module.exports = function getToken(inputOptions, callback) {
 
 module.exports.messages = messages;
 
+function isValid(options, callback) {
+    if (_.isEmpty(options.programName)) {
+        callback(new Error(messages.programNameRequired));
+        return false;
+    }
+    if (_.isEmpty(options.clientId)) {
+        callback(new Error(messages.clientIdRequired));
+        return false;
+    }
+    if (_.isEmpty(options.username)) {
+        callback(new Error(messages.usernameRequired));
+        return false;
+    }
+    if (_.isEmpty(options.password)) {
+        callback(new Error(messages.passwordRequired));
+        return false;
+    }
+    if (_.isEmpty(options.redirectUri)) {
+        callback(new Error(messages.redirectUriRequired));
+        return false;
+    }
+    if (_.isEmpty(options.neuronBaseUrl)) {
+        callback(new Error(messages.neuronBaseUrlRequired));
+        return false;
+    }
+    if (_.isEmpty(options.responseType)) {
+        callback(new Error(messages.responseTypeRequired));
+        return false;
+    }
+    return true;
+}
 

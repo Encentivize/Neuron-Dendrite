@@ -13,7 +13,7 @@ var defaultOptions = {
 
 describe('The get token method should validate the inputs that it is passed', function () {
     "use strict";
-    it('#01 - Program name is required', function (callback) {
+    it('#01 - programName is required', function (callback) {
         var options = _.clone(defaultOptions);
         delete options.programName;
         getToken(options, getTokenComplete);
@@ -23,7 +23,7 @@ describe('The get token method should validate the inputs that it is passed', fu
             callback();
         }
     });
-    it('#02 - Client Id is required', function (callback) {
+    it('#02 - clientId is required', function (callback) {
         var options = _.clone(defaultOptions);
         delete options.clientId;
         getToken(options, getTokenComplete);
@@ -33,7 +33,7 @@ describe('The get token method should validate the inputs that it is passed', fu
             callback();
         }
     });
-    it('#03 - Username is required', function (callback) {
+    it('#03 - username is required', function (callback) {
         var options = _.clone(defaultOptions);
         delete options.username;
         getToken(options, getTokenComplete);
@@ -43,7 +43,7 @@ describe('The get token method should validate the inputs that it is passed', fu
             callback();
         }
     });
-    it('#04 - Password is required', function (callback) {
+    it('#04 - password is required', function (callback) {
         var options = _.clone(defaultOptions);
         delete options.password;
         getToken(options, getTokenComplete);
@@ -53,7 +53,7 @@ describe('The get token method should validate the inputs that it is passed', fu
             callback();
         }
     });
-    it('#05 - Redirect uri is required', function (callback) {
+    it('#05 - redirectUri is required', function (callback) {
         var options = _.clone(defaultOptions);
         delete options.redirectUri;
         getToken(options, getTokenComplete);
@@ -86,6 +86,16 @@ describe('The get token method should validate the inputs that it is passed', fu
         getToken(options, getTokenComplete);
         function getTokenComplete(err) {
             expect(err).to.not.be.ok;
+            callback();
+        }
+    });
+    it('#09 - If the responseType is provided it cannot be blank', function (callback) {
+        var options = _.clone(defaultOptions);
+        options.responseType = "";
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message).to.equal(getToken.messages.responseTypeRequired);
             callback();
         }
     });
