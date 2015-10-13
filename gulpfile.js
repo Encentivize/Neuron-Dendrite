@@ -1,17 +1,19 @@
 'use strict';
-var gulp = require('gulp'),
-    jshint = require('gulp-jshint'),
-    mocha = require('gulp-mocha'),
-    istanbul = require('gulp-istanbul'),
-    argv = require('yargs').argv,
-    npm = require('npm'),
-    fs = require('fs');
+var gulp = require('gulp');
+var jshint = require('gulp-jshint');
+var mocha = require('gulp-mocha');
+var istanbul = require('gulp-istanbul');
+var argv = require('yargs').argv;
+var npm = require('npm');
+var fs = require('fs');
 
-var jsPath = ['./lib/**/*.js'],
-    testsPath = ['./test/**/*.tests.js'];
+var jsPath = ['./src/**/*.js'];
+var unitTestsPath = ['./test/**/*.unit.js'];
+var integrationTestsPath = ['./test/**/*.integration.js'];
+var allTestsPath = unitTestsPath.concat(integrationTestsPath);
 
 gulp.task('lint', function () {
-    return gulp.src(jsPath)
+    return gulp.src(jsPath.concat(allTestsPath))
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
         .pipe(jshint.reporter('fail'));
@@ -24,9 +26,9 @@ gulp.task('tests', function () {
         }))
         .pipe(istanbul.hookRequire())
         .on('finish', function () {
-            gulp.src(testsPath, {
-                    read: false
-                })
+            gulp.src(allTestsPath, {
+                read: false
+            })
                 .pipe(mocha({
                     reporter: 'nyan'
                 }))

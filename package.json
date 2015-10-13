@@ -7,7 +7,10 @@
     "test": "tests"
   },
   "keywords": [
-    "neuron"
+    "neuron",
+    "token",
+    "oauth",
+    "oauth2.0"
   ],
   "author": {
     "name": "Ryan Kotzen",
@@ -20,24 +23,19 @@
     "type": "git",
     "url": "git@github.com:Encentivize/Neuron-Dendrite.git"
   },
-  "keywords": [
-    "neuron",
-    "token",
-    "oauth",
-    "oauth2.0"
-  ],
   "dependencies": {
-    "request": "^2.65.0"
+    "lodash": "3.10.1",
+    "request": "2.65.0"
   },
   "devDependencies": {
+    "chai": "^3.3.0",
     "fs": "0.0.2",
     "gulp": "3.9.0",
-    "gulp-istanbul": "0.10.0",
-    "gulp-jshint": "1.11.0",
-    "gulp-mocha": "2.1.1",
-    "mocha": "2.2.5",
+    "gulp-istanbul": "0.10.1",
+    "gulp-jshint": "1.11.2",
+    "gulp-mocha": "2.1.3",
+    "mocha": "2.3.3",
     "npm": "2.8.3",
-    "should": "6.0.3",
-    "yargs": "3.10.0"
+    "yargs": "3.27.0"
   }
 }
