@@ -1,3 +1,4 @@
+"use strict";
 /*jshint expr: true*/ // needed so that the .ok passes linting
 var chai = require('chai');
 var expect = chai.expect;
