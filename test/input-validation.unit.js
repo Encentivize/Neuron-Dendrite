@@ -18,8 +18,7 @@ describe('The get token method should validate the inputs that it is passed', fu
         delete options.programName;
         getToken(options, getTokenComplete);
         function getTokenComplete(err, token) {
-            expect(err.message).to.equal('program cannot be blank');
-
+            expect(err.message).to.equal(getToken.messages.programNotFound);
         }
     });
 });

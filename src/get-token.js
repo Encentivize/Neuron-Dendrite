@@ -51,6 +51,9 @@ var _ = require('lodash');
 //
 //    }
 //}
+var messages = {
+    programNotFound: 'program cannot be blank'
+};
 
 module.exports = function getToken(inputOptions, callback) {
     var defaultOptions = {
@@ -61,6 +64,8 @@ module.exports = function getToken(inputOptions, callback) {
     };
     var options = _.merge({}, defaultOptions, inputOptions);
     if (_.isEmpty(options.programName)) {
-        return callback(new Error('program cannot be blank'));
+        return callback(new Error(messages.programNotFound));
     }
 };
+module.exports.messages = messages;
+
