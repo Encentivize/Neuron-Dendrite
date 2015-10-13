@@ -13,7 +13,7 @@ var defaultOptions = {
 
 describe('The get token method should validate the inputs that it is passed', function () {
     "use strict";
-    it('# Program name is required', function () {
+    it('#01 - Program name is required', function () {
         var options = _.clone(defaultOptions);
         delete options.programName;
         getToken(options, getTokenComplete);
