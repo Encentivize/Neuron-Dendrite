@@ -21,7 +21,8 @@ var messages = {
     responseTypeMustBeAString: 'Response type must be a string',
     postToLoginWasNot302: "The post to the login resulted in a status code other than the expected 302. Status code was :",
     postToLoginHadNoLocationHeader: "The post to the login resulted in a response that was a 302 but had no location header",
-    redirectFromLoginWasNot302: "The redirect from the login post resulted in a status code other than the expected 302. Status code was :"
+    redirectFromLoginWasNot302: "The redirect from the login post resulted in a status code other than the expected 302. Status code was :",
+    redirectFromLoginHadNoLocationHeader: "The post to the login resulted in a response that was a 302 but had no location header"
 };
 
 module.exports = function getToken(inputOptions, callback) {
@@ -57,7 +58,7 @@ module.exports = function getToken(inputOptions, callback) {
             return callback(error);
         }
         if (httpResponse.statusCode === 302) {
-            if (!httpResponse.headers.location) {
+            if (!httpResponse.headers || !httpResponse.headers.location) {
                 return callback(new Error(messages.postToLoginHadNoLocationHeader));
             }
             var redirectUrl = options.neuronBaseUrl + httpResponse.headers.location;
@@ -79,6 +80,9 @@ module.exports = function getToken(inputOptions, callback) {
             return callback(error);
         }
         if (httpResponse.statusCode === 302) {
+            if (!httpResponse.headers || !httpResponse.headers.location) {
+                return callback(new Error(messages.redirectFromLoginHadNoLocationHeader));
+            }
             var searchString = 'access_token=';
             var startIndex = httpResponse.headers.location.indexOf(searchString);
             var tokenRightPart = httpResponse.headers.location.substr(startIndex);
