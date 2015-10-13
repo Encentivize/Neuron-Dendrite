@@ -63,4 +63,22 @@ describe('The get token method should validate the inputs that it is passed', fu
             callback();
         }
     });
+    it('#06 - If no neuronBaseUrl is provided it should use a default and not contain an error', function (callback) {
+        var options = _.clone(defaultOptions);
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.not.be.ok;
+            callback();
+        }
+    });
+    it('#07 - If the neuronBaseUrl is provided it cannot be blank', function (callback) {
+        var options = _.clone(defaultOptions);
+        options.neuronBaseUrl = "";
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message).to.equal(getToken.messages.neuronBaseUrlRequired);
+            callback();
+        }
+    });
 });
