@@ -4,21 +4,24 @@ var _ = require('lodash');
 
 var messages = {
     programNameRequired: 'Program name cannot be blank',
-    programNameMustBeAString : 'Program name must be a string',
-    programNameIsInTheWrongFormat : 'Program name can only contain numbers, letters and dashes',
+    programNameMustBeAString: 'Program name must be a string',
+    programNameIsInTheWrongFormat: 'Program name can only contain numbers, letters and dashes',
     clientIdRequired: 'Client id cannot be blank',
-    clientIdMustBeAString : 'Client id must be a string',
-    clientIdIsInTheWrongFormat:'Client id  can only contain numbers, letters and dashes',
+    clientIdMustBeAString: 'Client id must be a string',
+    clientIdIsInTheWrongFormat: 'Client id  can only contain numbers, letters and dashes',
     usernameRequired: 'Username cannot be blank',
-    usernameMustBeAString : 'Username must be a string',
+    usernameMustBeAString: 'Username must be a string',
     passwordRequired: 'Password cannot be blank',
-    passwordMustBeAString : 'Password must be a string',
+    passwordMustBeAString: 'Password must be a string',
     redirectUriRequired: 'Redirect uri cannot be blank',
-    redirectUriMustBeAString : 'Redirect uri must be a string',
+    redirectUriMustBeAString: 'Redirect uri must be a string',
     neuronBaseUrlRequired: 'Neuron base url cannot be blank',
-    neuronBaseUrlMustBeAString : 'Neuron base url must be a string',
+    neuronBaseUrlMustBeAString: 'Neuron base url must be a string',
     responseTypeRequired: 'Response type cannot be blank',
-    responseTypeMustBeAString : 'Response type must be a string'
+    responseTypeMustBeAString: 'Response type must be a string',
+    postToLoginWasNot302: "The post to the login resulted in a status code other than the expected 302. Status code was :",
+    postToLoginHadNoLocationHeader: "The post to the login resulted in a response that was a 302 but had no location header",
+    redirectFromLoginWasNot302: "The redirect from the login post resulted in a status code other than the expected 302. Status code was :"
 };
 
 module.exports = function getToken(inputOptions, callback) {
@@ -33,51 +36,58 @@ module.exports = function getToken(inputOptions, callback) {
         return;
     }
     var fullUrl = options.neuronBaseUrl + '/' + options.programName + '/login';
-    return callback();
-    //var postOptions = {
-    //    url: fullUrl,
-    //    form: {
-    //        client_id: "cairo-frontend-dev",
-    //        password: "123456",
-    //        redirect_uri: "http://localhost:6792/#/login",
-    //        response_type: "token",
-    //        scope: "",
-    //        state: "",
-    //        username: "vivoenergy@encentivize.co.za"
-    //    },
-    //    method: "POST",
-    //    jar: true
-    //};
-    //request(postOptions, postToLoginComplete);
-    //
-    //function postToLoginComplete(error, httpResponse) {
-    //    if (error) {
-    //        return callback(error);
-    //    }
-    //    if (httpResponse.statusCode === 302) {
-    //        var redirectUrl = neuronBaseUrl + httpResponse.headers.location;
-    //
-    //        var redirectOptions = {
-    //            url: redirectUrl,
-    //            method: "GET",
-    //            jar: true,
-    //            followRedirect: false
-    //        };
-    //
-    //        return request(redirectOptions, redirectToAuthoriseComplete)
-    //    }
-    //
-    //}
-    //
-    //function redirectToAuthoriseComplete(error, httpResponse, body) {
-    //    if (httpResponse.statusCode === 302) {
-    //        var searchString = 'access_token=';
-    //        var startIndex = httpResponse.headers.location.indexOf(searchString);
-    //        var tokenRightPart = httpResponse.headers.location.substr(startIndex);
-    //        var endIndex = tokenRightPart.indexOf('&');
-    //        var token = tokenRightPart.substring(searchString.length, endIndex);
-    //    }
-    //}
+    var postOptions = {
+        url: fullUrl,
+        form: {
+            client_id: options.clientId,
+            password: options.password,
+            redirect_uri: options.redirectUri,
+            response_type: options.responseType,
+            scope: options.scope,
+            state: options.state,
+            username: options.username
+        },
+        method: "POST",
+        jar: true
+    };
+    request(postOptions, postToLoginComplete);
+
+    function postToLoginComplete(error, httpResponse) {
+        if (error) {
+            return callback(error);
+        }
+        if (httpResponse.statusCode === 302) {
+            if (!httpResponse.headers.location) {
+                return callback(new Error(messages.postToLoginHadNoLocationHeader));
+            }
+            var redirectUrl = options.neuronBaseUrl + httpResponse.headers.location;
+
+            var redirectOptions = {
+                url: redirectUrl,
+                method: "GET",
+                jar: true,
+                followRedirect: false
+            };
+
+            return request(redirectOptions, redirectToAuthoriseComplete);
+        }
+        return callback(new Error(messages.postToLoginWasNot302 + httpResponse.statusCode));
+    }
+
+    function redirectToAuthoriseComplete(error, httpResponse) {
+        if (error) {
+            return callback(error);
+        }
+        if (httpResponse.statusCode === 302) {
+            var searchString = 'access_token=';
+            var startIndex = httpResponse.headers.location.indexOf(searchString);
+            var tokenRightPart = httpResponse.headers.location.substr(startIndex);
+            var endIndex = tokenRightPart.indexOf('&');
+            var token = tokenRightPart.substring(searchString.length, endIndex);
+            return callback(null, token);
+        }
+        return callback(new Error(messages.redirectFromLoginWasNot302 + httpResponse.statusCode));
+    }
 };
 
 module.exports.messages = messages;
@@ -92,7 +102,7 @@ function isValid(options, callback) {
         return false;
     }
     var alphaNumericDashRegex = new RegExp('^[a-zA-Z0-9/-]*$');
-    if(!alphaNumericDashRegex.test(options.programName)){
+    if (!alphaNumericDashRegex.test(options.programName)) {
         callback(new Error(messages.programNameIsInTheWrongFormat));
         return false;
     }
@@ -104,7 +114,7 @@ function isValid(options, callback) {
         callback(new Error(messages.clientIdMustBeAString));
         return false;
     }
-    if(!alphaNumericDashRegex.test(options.clientId)){
+    if (!alphaNumericDashRegex.test(options.clientId)) {
         callback(new Error(messages.clientIdIsInTheWrongFormat));
         return false;
     }
@@ -152,5 +162,5 @@ function isValid(options, callback) {
 }
 
 function isString(value) {
-    return typeof value == 'string' || value instanceof String;
+    return typeof value === 'string' || value instanceof String;
 }
