@@ -155,4 +155,42 @@ describe('The get token method should return the token', function () {
             callback();
         }
     });
+    it('#09 token should be retrievable if there is an ampersand after it', function (callback) {
+        getToken.__set__("request", function (options, callback) {
+            var token = 'bob#123%3==';
+            var response = {
+                statusCode: 302,
+                headers: {
+                    location: "fake&access_token="+token+"&code=hi"
+                }
+            };
+            return callback(null, response);
+        });
+        var options = _.clone(defaultOptions);
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err, token) {
+            expect(err).to.be.not.ok;
+            expect(token).to.equal(token);
+            callback();
+        }
+    });
+    it('#09 token should be retrievable if there is nothing after it', function (callback) {
+        getToken.__set__("request", function (options, callback) {
+            var token = 'bob#123%3==';
+            var response = {
+                statusCode: 302,
+                headers: {
+                    location: "fake&access_token="+token
+                }
+            };
+            return callback(null, response);
+        });
+        var options = _.clone(defaultOptions);
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err, token) {
+            expect(err).to.be.not.ok;
+            expect(token).to.equal(token);
+            callback();
+        }
+    });
 });
