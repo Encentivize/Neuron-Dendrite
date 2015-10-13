@@ -17,7 +17,7 @@ describe('The get token method should validate the inputs that it is passed', fu
         var options = _.clone(defaultOptions);
         delete options.programName;
         getToken(options, getTokenComplete);
-        function getTokenComplete(err, token) {
+        function getTokenComplete(err) {
             expect(err.message).to.equal(getToken.messages.programNotFound);
         }
     });
