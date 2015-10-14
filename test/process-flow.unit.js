@@ -32,6 +32,12 @@ var invalidResponseNoLocationInHeaders = {
 var unexpectedResponse = {
     statusCode: 200
 };
+var redirectToErrorPageResponse = {
+    statusCode: 302,
+    headers: {
+        location: "/test-program/error"
+    }
+};
 
 var testError = new Error('Test Error');
 var counter = 0;
@@ -190,6 +196,53 @@ describe('The get token method should return the token', function () {
         function getTokenComplete(err, token) {
             expect(err).to.be.not.ok;
             expect(token).to.equal(token);
+            callback();
+        }
+    });
+    it('#10 - if the initial request results in a 302 but the location is :programName/error then return an appropriate error', function (callback) {
+        getToken.__set__("request", function (options, callback) {
+            return callback(null, redirectToErrorPageResponse);
+        });
+        var options = _.clone(defaultOptions);
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message.indexOf(getToken.messages.postResultedInARedirectToErrorPage)).to.equal(0);
+            callback();
+        }
+    });
+    it('#11 - if the initial request was successful but the second results in a 302 but the location is :programName/error then return an appropriate error', function (callback) {
+        counter = 0;
+        getToken.__set__("request", function (options, callback) {
+            if (counter === 0) {
+                counter++;
+                return callback(null, successResponse);
+            }
+            return callback(null, redirectToErrorPageResponse);
+        });
+        var options = _.clone(defaultOptions);
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message.indexOf(getToken.messages.postResultedInARedirectToErrorPage)).to.equal(0);
+            callback();
+        }
+    });
+    it('#12 If the location did not contain an access token, the appropriate error should be returned', function (callback) {
+        getToken.__set__("request", function (options, callback) {
+            var response = {
+                statusCode: 302,
+                headers: {
+                    location: "http://www.fakesite.co.za/fake?potato=true&asd=12"
+                }
+            };
+            return callback(null, response);
+        });
+        var options = _.clone(defaultOptions);
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message.indexOf(getToken.messages.redirectDidNotContainAccessToken)).to.equal(0);
             callback();
         }
     });
