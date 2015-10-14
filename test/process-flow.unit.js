@@ -228,4 +228,22 @@ describe('The get token method should return the token', function () {
             callback();
         }
     });
+    it('#12 If the location did not contain an access token, the appropriate error should be returned', function (callback) {
+        getToken.__set__("request", function (options, callback) {
+            var response = {
+                statusCode: 302,
+                headers: {
+                    location: "http://www.fakesite.co.za/fake?potato=true&asd=12"
+                }
+            };
+            return callback(null, response);
+        });
+        var options = _.clone(defaultOptions);
+        getToken(options, getTokenComplete);
+        function getTokenComplete(err) {
+            expect(err).to.be.ok;
+            expect(err.message.indexOf(getToken.messages.redirectDidNotContainAccessToken)).to.equal(0);
+            callback();
+        }
+    });
 });
