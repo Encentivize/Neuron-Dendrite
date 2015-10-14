@@ -22,7 +22,8 @@ var messages = {
     postToLoginWasNot302: "The post to the login resulted in a status code other than the expected 302. Status code was :",
     postToLoginHadNoLocationHeader: "The post to the login resulted in a response that was a 302 but had no location header",
     redirectFromLoginWasNot302: "The redirect from the login post resulted in a status code other than the expected 302. Status code was :",
-    redirectFromLoginHadNoLocationHeader: "The post to the login resulted in a response that was a 302 but had no location header"
+    redirectFromLoginHadNoLocationHeader: "The post to the login resulted in a response that was a 302 but had no location header",
+    postResultedInARedirectToErrorPage: "The post resulted in a redirect to the error page"
 };
 
 module.exports = function getToken(inputOptions, callback) {
@@ -61,6 +62,9 @@ module.exports = function getToken(inputOptions, callback) {
             if (!httpResponse.headers || !httpResponse.headers.location) {
                 return callback(new Error(messages.postToLoginHadNoLocationHeader));
             }
+            if (httpResponse.headers.location.indexOf('/' + options.programName + '/error') === 0) {
+                return callback(new Error(messages.postResultedInARedirectToErrorPage));
+            }
             var redirectUrl = options.neuronBaseUrl + httpResponse.headers.location;
 
             var redirectOptions = {
@@ -82,6 +86,9 @@ module.exports = function getToken(inputOptions, callback) {
         if (httpResponse.statusCode === 302) {
             if (!httpResponse.headers || !httpResponse.headers.location) {
                 return callback(new Error(messages.redirectFromLoginHadNoLocationHeader));
+            }
+            if (httpResponse.headers.location.indexOf('/' + options.programName + '/error') === 0) {
+                return callback(new Error(messages.postResultedInARedirectToErrorPage));
             }
             var searchString = 'access_token=';
             var startIndex = httpResponse.headers.location.indexOf(searchString);
