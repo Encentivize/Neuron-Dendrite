@@ -1,0 +1,55 @@
+language: node_js
+sudo: false
+node_js:
+  - "6"
+
+notifications:
+  slack:
+    rooms:
+      - secure: StAj59ptclQAZBH76AjX4NKxgMcCi7SZ5x2UY+HEmVyOp1VmPlTmzxlxTojk3/S5CbrFQVfA4+fYQONvKWG2G/da6cL/IucE3U+G6RFXifdvCavzeYAbC6eGxG0IuPTqaFnCL/OrYgr0b1jK+9sYPTOFMh3S2DIhhrsZl1DF9sRAZ6EFU9GlQwGgUpBe2Sk8x4oanP9wVT/gnDPvNASo8oLriB0aUZ57fjQ4yj7kungRVnaavdHEQjFiUqseb3bJc5z7WEmWRRazgT095QhA6LbGFd5g2OhZLUj6ietG+xA/uBp2Zb9T9Bb2rVmILY7G8W0gnnxh+dNdqnmXsrwZy/8iuFBqWR670ILHbtmA2e8sf5PrCdnDZ3yJJRK65pmuDuU4P2zjvd4SijWOxyr28+es52cnNEgG3Brsgz5OP7bu0P9vvcJsZi2z+BM/Rz88OikLmK3/A2w2sEU3bVq3NNWFGII12OKE2N/PF8e/aO5GKxgKP6rFbdJHVAidDBAYCcb7/F/7v+a1cq76ph7X4FWx32Eg5wYu8hAHbEsFz3ue3A7COpHj4nd+wQ37k0EwNru/FWFX+1a6HNwXvetn+GnlIsszYe91VHqV731r8dLAb1zPHm5F5JogOZQJAd87XrOdIhZNrtgbVQaZpyR2xHayWnE1ZynrOT7RJ/fc0Ns=
+    on_success: always
+    on_failure: always
+    template:
+      - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository}@%{branch} by %{author} %{result} in %{duration}"
+  email: false
+
+git:
+  depth: 3
+
+# whitelist
+branches:
+  only:
+    - master
+    - /^v1\..+/
+
+cache:
+  directories:
+    - "node_modules"
+
+install:
+  # Check the size of caches
+  - du -sh ./node_modules || true
+  # Disable the spinner, it looks bad on Travis
+  - npm config set spin false
+  # Log HTTP requests
+  - npm config set loglevel http
+  # Install npm dependencies and ensure that npm cache is not stale
+  - npm install
+
+before_script:
+  - npm run lint
+
+script:
+
+after_success:
+
+before_deploy:
+
+deploy:
+  - provider: npm
+    email: $NPM_EMAIL
+    api_key: $NPM_TOKEN
+    on:
+      node: "6"
+      all_branches: true
+      tags: true
