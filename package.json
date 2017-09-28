@@ -1,6 +1,6 @@
 {
   "name": "neuron-dendrite",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Allows you to easily acquire Neuron member tokens in your app in order to perform integration testing",
   "main": "index.js",
   "scripts": {
