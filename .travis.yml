@@ -37,9 +37,9 @@ install:
   - npm install
 
 before_script:
-  - npm run lint
 
 script:
+  - gulp
 
 after_success:
 
